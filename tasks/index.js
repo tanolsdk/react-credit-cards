@@ -5,7 +5,9 @@ const chalk = require('chalk');
 const yargs = require('yargs');
 
 const run = promisify(exec);
+//throw new Error(err);
 
+//.then(() => run('mkdir -p es lib'))
 module.exports = yargs
   .command({
     command: 'build-styles',
@@ -15,12 +17,11 @@ module.exports = yargs
         .then(() => run('node-sass -o .tmp/ src/styles.scss'))
         .then(() => run('postcss .tmp/styles.css --use autoprefixer --no-map -d .tmp/'))
         .then(() => run('mv .tmp/styles.css .tmp/styles-compiled.css'))
-        .then(() => run('mkdir -p es lib'))
         .then(() => run('cp .tmp/styles-compiled.css es/ && cp .tmp/styles-compiled.css lib/'))
         .then(() => run('cp src/styles.scss es/ && cp src/styles.scss lib/'))
         .then(() => console.log(chalk.green('✔ Styles have been build')))
         .catch(err => {
-          throw new Error(err);
+          console.log(err);
         });
     },
   })
